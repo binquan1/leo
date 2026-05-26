@@ -2,150 +2,123 @@
 <html lang="zh">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Tony's Kitchen</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <style>
-        body {
-            margin: 0;
-            background: #0f0f0f;
-            font-family: Arial;
-            color: white;
-        }
+  <title>我的视频网站</title>
 
-        .header {
-            background: #181818;
-            padding: 20px;
-            font-size: 32px;
-            font-weight: bold;
-            color: orange;
-        }
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
-        .container {
-            width: 90%;
-            margin: auto;
-        }
+  <style>
+    body {
+      margin: 0;
+      background: #0f0f0f;
+      color: white;
+      font-family: Arial;
+    }
 
-        .categories {
-            margin-top: 20px;
-            margin-bottom: 30px;
-        }
+    header {
+      padding: 30px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+    }
 
-        .categories button {
-            background: #222;
-            color: white;
-            border: 1px solid #444;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 20px;
-            cursor: pointer;
-        }
+    .videos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 25px;
+      padding: 30px;
+    }
 
-        .categories button:hover {
-            background: orange;
-            color: black;
-        }
+    .card {
+      background: #1c1c1c;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: 0.3s;
+    }
 
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
+    .card:hover {
+      transform: scale(1.03);
+    }
 
-        .video-card {
-            background: #1a1a1a;
-            border-radius: 15px;
-            overflow: hidden;
-            transition: 0.3s;
-        }
+    iframe {
+      width: 100%;
+      height: 220px;
+      border: none;
+    }
 
-        .video-card:hover {
-            transform: scale(1.03);
-        }
+    .content {
+      padding: 20px;
+    }
 
-        iframe {
-            width: 100%;
-            height: 220px;
-            border: none;
-        }
+    .title {
+      font-size: 22px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
 
-        .video-info {
-            padding: 15px;
-        }
+    .desc {
+      color: #ccc;
+      margin-bottom: 15px;
+    }
 
-        .video-title {
-            font-size: 22px;
-            margin-bottom: 10px;
-        }
-
-        .video-desc {
-            color: #aaa;
-            font-size: 15px;
-        }
-    </style>
+    .category {
+      display: inline-block;
+      background: #ff0033;
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="header">
-        🍕 Tony's Kitchen
-    </div>
+  <header>
+    🎬 我的视频网站
+  </header>
 
-    <div class="container">
+  <div class="videos" id="videos"></div>
 
-        <div class="categories">
-            <button>全部</button>
-            <button>美食</button>
-            <button>甜品</button>
-            <button>披萨</button>
-            <button>早餐</button>
-        </div>
+  <script>
+    const videoFiles = [
+      "videos/cat-video.md"
+    ];
 
-        <div class="video-grid">
+    async function loadVideos() {
 
-            <div class="video-card">
+      const container = document.getElementById("videos");
 
-                <iframe src="https://www.youtube.com/embed/jNQXAC9IVRw"
-                    allowfullscreen>
-                </iframe>
+      for (const file of videoFiles) {
 
-                <div class="video-info">
+        const response = await fetch(file);
 
-                    <div class="video-title">
-                        我的第一个视频
-                    </div>
+        const text = await response.text();
 
-                    <div class="video-desc">
-                        这是我的视频网站测试视频。
-                    </div>
+        const title = text.match(/title:\s*(.*)/)[1];
+        const description = text.match(/description:\s*(.*)/)[1];
+        const youtube = text.match(/youtube:\s*(.*)/)[1];
+        const category = text.match(/category:\s*(.*)/)[1];
 
-                </div>
+        container.innerHTML += `
+          <div class="card">
+            <iframe src="${youtube}" allowfullscreen></iframe>
 
+            <div class="content">
+              <div class="title">${title}</div>
+
+              <div class="desc">${description}</div>
+
+              <div class="category">${category}</div>
             </div>
+          </div>
+        `;
+      }
+    }
 
-            <div class="video-card">
-
-                <iframe src="https://www.youtube.com/embed/aqz-KE-bpKQ"
-                    allowfullscreen>
-                </iframe>
-
-                <div class="video-info">
-
-                    <div class="video-title">
-                        第二个视频
-                    </div>
-
-                    <div class="video-desc">
-                        这是第二个测试视频。
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+    loadVideos();
+  </script>
 
 </body>
 
