@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: binquan1/my-video-site
+  repo: binquan1/leo
   branch: main
 
 media_folder: "images/uploads"
