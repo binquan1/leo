@@ -1,6 +1,5 @@
 backend:
-  name: github
-  repo: binquan1/leo
+  name: git-gateway
   branch: main
 
 media_folder: "images/uploads"
@@ -11,7 +10,6 @@ collections:
     label: "视频"
     folder: "videos"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
 
     fields:
       - { label: "视频标题", name: "title", widget: "string" }
@@ -20,12 +18,4 @@ collections:
 
       - { label: "YouTube嵌入链接", name: "youtube", widget: "string" }
 
-      - label: "视频分类"
-        name: "category"
-        widget: "select"
-        options:
-          - "教程"
-          - "美食"
-          - "游戏"
-          - "音乐"
-          - "其它"
+      - { label: "视频分类", name: "category", widget: "string" }
