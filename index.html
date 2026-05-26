@@ -82,43 +82,45 @@
   <div class="videos" id="videos"></div>
 
   <script>
-    const videoFiles = [
-      "videos/cat-video.md"
-    ];
 
-    async function loadVideos() {
+async function loadVideos() {
 
-      const container = document.getElementById("videos");
+  const container = document.getElementById("videos");
 
-      for (const file of videoFiles) {
+  const response = await fetch("video-list.json");
 
-        const response = await fetch(file);
+  const videoFiles = await response.json();
 
-        const text = await response.text();
+  for (const file of videoFiles) {
 
-        const title = text.match(/title:\s*(.*)/)[1];
-        const description = text.match(/description:\s*(.*)/)[1];
-        const youtube = text.match(/youtube:\s*(.*)/)[1];
-        const category = text.match(/category:\s*(.*)/)[1];
+    const res = await fetch(file);
 
-        container.innerHTML += `
-          <div class="card">
-            <iframe src="${youtube}" allowfullscreen></iframe>
+    const text = await res.text();
 
-            <div class="content">
-              <div class="title">${title}</div>
+    const title = text.match(/title:\s*(.*)/)[1];
+    const description = text.match(/description:\s*(.*)/)[1];
+    const youtube = text.match(/youtube:\s*(.*)/)[1];
+    const category = text.match(/category:\s*(.*)/)[1];
 
-              <div class="desc">${description}</div>
+    container.innerHTML += `
+      <div class="card" data-category="${category}">
+        <iframe src="${youtube}" allowfullscreen></iframe>
 
-              <div class="category">${category}</div>
-            </div>
-          </div>
-        `;
-      }
-    }
+        <div class="content">
+          <div class="title">${title}</div>
 
-    loadVideos();
-  </script>
+          <div class="desc">${description}</div>
+
+          <div class="category">${category}</div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+loadVideos();
+
+</script>
 
 </body>
 
